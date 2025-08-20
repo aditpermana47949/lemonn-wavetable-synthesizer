@@ -9,7 +9,7 @@ Installation & Usage:
 1.  Clone the repository
     Open your terminal and run this command:
     ```bash
-    git clone [https://github.com/aditpermana47949/lemonn-wavetable-synthesizer.git](https://github.com/aditpermana47949/lemonn-wavetable-synthesizer.git)
+    git clone https://github.com/aditpermana47949/lemonn-wavetable-synthesizer.git
     ```
     
 2.  Navigate to the project directory
