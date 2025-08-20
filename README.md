@@ -1,7 +1,7 @@
 # Lemonn Wavetable Synthesizer
 A Python-based wavetable synthesizer for sound design, featuring dual oscillators and other essential audio tools.
 
-![Project screenshot](Screenshot 2025-08-20 204123.png)
+![Project screenshot](https://github.com/aditpermana47949/lemonn-wavetable-synthesizer/blob/7bda6c00590894b14931064681c543f7890ce2f0/Screenshot%202025-08-20%20204123.png)
 
 Follow these steps to get the project running on your local machine.
 
