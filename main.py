@@ -10,7 +10,6 @@ from tkinter.filedialog import askdirectory
 from tkinter.filedialog import askopenfilename
 import os
 
-# Import key mappings dari keyboard
 from dearpygui.dearpygui import (
     mvKey_Z, mvKey_X, mvKey_C, mvKey_V, mvKey_B, mvKey_N, mvKey_M,
     mvKey_S, mvKey_D, mvKey_G, mvKey_H, mvKey_J, mvKey_L, mvKey_K,
@@ -63,13 +62,11 @@ folder_path = None
 root_presets_path = os.path.join(os.getcwd(), "Presets")
 
 
-# Tambahkan global ID
-# Tambahkan di global configuration section
 input_id = None
 
 
 
-# Key mapping (keyboard -> frekuensi)
+# Key mapping (keyboard -> freq)
 key_to_freq = {
     'z': 261.63, 's': 277.18, 'x': 293.66, 'd': 311.13, 'c': 329.63,
     'v': 349.23, 'g': 369.99, 'b': 392.00, 'h': 415.30, 'n': 440.00,
@@ -128,7 +125,6 @@ def audio_callback(outdata, frames, time, status):
 
     waveform = np.zeros(frames)
 
-    # Mono glide (slide)
     if is_mono and (slide_enabled or always_slide) and current_freq is not None and target_freq is not None:
         diff = target_freq - current_freq
         max_step = (frames / sample_rate) / slide_speed * abs(diff)
@@ -173,9 +169,7 @@ def audio_callback(outdata, frames, time, status):
             weight1 = 1.0 - (blend_strength * abs(i - center1) / center1) if center1 != 0 else 1.0
             weight1 = max(weight1, 0.0)
             
-            # Perhitungan frekuensi efektif dengan memperhatikan octave shift dalam mode mono
             if is_mono and (slide_enabled or always_slide) and current_freq is not None:
-                # Pertahankan rasio detuning relatif terhadap frekuensi dasar yang sudah di-shift octave
                 effective_freq = current_freq * (dfreq / osc1_freq)
             else:
                 effective_freq = dfreq
@@ -196,7 +190,6 @@ def audio_callback(outdata, frames, time, status):
                 weight2 = 1.0 - (osc2_unison['blend'] * abs(i - center2) / center2) if center2 != 0 else 1.0
                 weight2 = max(weight2, 0.0)
                 
-                # Perhitungan serupa untuk OSC2
                 if is_mono and (slide_enabled or always_slide) and current_freq is not None:
                     effective_freq = current_freq * (dfreq / osc2_freq)
                 else:
@@ -219,11 +212,11 @@ def start_note(freq):
         is_overlapping = len(pressed_keys | pressed_midi_notes) > 1
         if (slide_enabled and is_overlapping) or always_slide:
             if current_freq is None:
-                current_freq = freq * (2 ** current_octave_osc1)  # Terapkan octave shift
-            target_freq = freq * (2 ** current_octave_osc1)  # Terapkan octave shift
+                current_freq = freq * (2 ** current_octave_osc1)
+            target_freq = freq * (2 ** current_octave_osc1)
         else:
-            current_freq = freq * (2 ** current_octave_osc1)  # Terapkan octave shift
-            target_freq = freq * (2 ** current_octave_osc1)  # Terapkan octave shift
+            current_freq = freq * (2 ** current_octave_osc1)
+            target_freq = freq * (2 ** current_octave_osc1) 
         active_freqs.clear()
     else:
         if len(active_freqs) >= 6: return
@@ -280,7 +273,6 @@ def generate_wave_from_text(sender, text):
     )
 
     def custom_wave(freq, t):
-        # Terapkan octave shift untuk OSC1
         adjusted_freq = freq * (2 ** current_octave_osc1)
         phase = (adjusted_freq * t) % 1.0
         idx = (phase * resolution).astype(int)
@@ -453,7 +445,7 @@ def update_octave_osc2(s, a):
     print(f"[OSC2] Octave set to {a}")
 
 def on_key_press(sender, app_data):
-    if is_item_focused(input_id) or is_item_focused(input_id2):  # Jangan trigger note kalau sedang ngetik
+    if is_item_focused(input_id) or is_item_focused(input_id2): 
         return
 
     key = key_lookup.get(app_data)
@@ -533,7 +525,7 @@ def load_preset(input_path):
     try:
         if input_path is None:
             input_path = select_file()
-            if not input_path:  # User membatalkan dialog
+            if not input_path: 
                 return
                 
         with open(input_path, "r") as f:
@@ -608,8 +600,8 @@ def select_folder():
 
 def select_file():
     root = Tk()
-    root.withdraw()  # Menyembunyikan jendela utama Tkinter
-    root.attributes('-topmost', True)  # Menjadikan dialog tetap di atas
+    root.withdraw()  
+    root.attributes('-topmost', True)
     file_path = askopenfilename(title="Choose a preset")
     root.attributes('-topmost', False)
     root.destroy()
@@ -627,9 +619,7 @@ def get_all_presets(folder_path):
 
 
 def get_display_name(filepath):
-    # Ambil nama file dengan ekstensi
     filename_with_ext = os.path.basename(filepath)
-    # Hilangkan ekstensi
     filename, _ = os.path.splitext(filename_with_ext)
     return filename
 
